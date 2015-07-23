@@ -77,7 +77,7 @@ class SessionRepl:
 
 def help():
     m = '''
-Available commands: help, set <word>, clear, w <length>, quit
+Available commands: help, set <word>, clear, <length>, quit
     help: prints this message.
     set <word>: sets the current word as <word>. All sub-words are taken from this one.
     clear: removes current word. To set a new one, use set command.
