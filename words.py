@@ -12,7 +12,7 @@ def load_words(file):
     f = open(file)
     for line in f:
         line = line.strip()
-        match = re.match(r'(\w+)/.*', line)
+        match = re.match(r'(\w+)', line)
         if match:
             wv = match.group(1).upper()
             wk = ''.join(sorted(list(wv)))
@@ -57,6 +57,7 @@ class SessionRepl:
     def set_word(self, w):
         self.word = w
         self.wset = True
+        self.word_len = {}
 
     def print_words(self, n):
         if not self.wset:
@@ -115,7 +116,10 @@ def repl():
             print('*** Not sure what that means, try help')
 
 if __name__ == '__main__':
-    load_words('en_US.dic')
+    print('Loading dictionary... ', end='')
+    sys.stdout.flush()
+    load_words('words')
+    print('done')
     repl()
 
     
