@@ -1,4 +1,5 @@
-# Python 3.4
+# Python 3.4 - sub-word search utility
+# See accompanying LICENSE and README.md files for more info
 
 import re
 from collections import defaultdict
