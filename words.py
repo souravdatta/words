@@ -50,6 +50,7 @@ def get_words(wseq, n):
 class SessionRepl:
     def __init__(self):
         self.word = ''
+        self.word_len = {}
         self.wset = False
 
     def set_word(self, w):
@@ -59,20 +60,27 @@ class SessionRepl:
     def print_words(self, n):
         if not self.wset:
             return
-        print(get_words(self.word, int(n)))
+        s = set()
+        if n not in self.word_len:
+            s = get_words(self.word, int(n))
+            self.word_len[n] = s
+        else:
+            s = self.word_len[n]
+        print(s)
 
     def clear(self):
         self.word = ''
+        self.word_len = {}
         self.wset = False
 
 def help():
     m = '''
 Available commands: help, set <word>, clear, w <length>, quit
-    help       -> prints this message.
-    set <word> -> sets the current word as <word>. All sub-words are taken from this one.
-    clear      -> removes current word. To set a new one, use set command.
-    w <length> -> prints the set of sub-words of length <length> for the current word set. Shows nothing when no word is set.
-    quit       -> quits the REPL.
+    help: prints this message.
+    set <word>: sets the current word as <word>. All sub-words are taken from this one.
+    clear: removes current word. To set a new one, use set command.
+    <length:int>: prints the set of sub-words of length <length> (an int) for the current word set. Shows nothing when no word is set.
+    quit: quits the REPL.
     '''
     print(m)
         
@@ -97,14 +105,11 @@ def repl():
             session.set_word(word)
         elif command == 'CLEAR':
             session.clear()
-        elif command == 'W':
-            if l == 1:
-                print('*** w requires an argument')
-                continue
-            length = int(parts[1])
-            session.print_words(length)
         elif command == 'QUIT':
             sys.exit(0)
+        elif re.match(r'\d+', command):
+            length = int(command)
+            session.print_words(length)
         else:
             print('*** Not sure what that means, try help')
 
