@@ -77,18 +77,19 @@ class SessionRepl:
 
 def help():
     m = '''
-Available commands: help, set <word>, clear, <length>, quit
-    help: prints this message.
-    set <word>: sets the current word as <word>. All sub-words are taken from this one.
-    clear: removes current word. To set a new one, use set command.
+Available commands:
+    :help: prints this message.
+    <word>: sets the current word as <word>. All sub-words are taken from this one.
+    :clear: removes current word. To set a new one, use set command.
     <length:int>: prints the set of sub-words of length <length> (an int) for the current word set. Shows nothing when no word is set.
-    quit: quits the REPL.
+    :quit: quits the REPL.
     '''
     print(m)
         
 def repl():
     session = SessionRepl()
     session.clear()
+    print('words-search utility\ntype :help to see available commands\ntype :quit to exit the prompt')
     while True:
         line = input('?- ').strip()
         parts = re.split(r'\s+', line)
@@ -97,18 +98,15 @@ def repl():
             print('*** Bad command')
             continue
         command = parts[0].upper()
-        if command == 'HELP':
+        if command == ':HELP':
             help()
-        elif command == 'SET':
-            if l == 1:
-                print('*** set requires an argument')
-                continue
-            word = parts[1].upper()
-            session.set_word(word)
-        elif command == 'CLEAR':
+        elif command == ':CLEAR':
             session.clear()
-        elif command == 'QUIT':
+        elif command == ':QUIT':
             sys.exit(0)
+        elif re.match(r'[a-zA-Z]{1,}', command):
+            word = parts[0].upper()
+            session.set_word(word)
         elif re.match(r'\d+', command):
             length = int(command)
             session.print_words(length)
