@@ -4,6 +4,7 @@
 import re
 from collections import defaultdict
 import sys
+import gc
 
 word_dict = defaultdict(set)
 
@@ -55,6 +56,7 @@ class SessionRepl:
         self.wset = False
 
     def set_word(self, w):
+        self.clear()
         self.word = w
         self.wset = True
         self.word_len = {}
@@ -72,8 +74,10 @@ class SessionRepl:
 
     def clear(self):
         self.word = ''
-        self.word_len = {}
+        self.word_len = None
         self.wset = False
+        gc.collect()
+
 
 def help():
     m = '''
