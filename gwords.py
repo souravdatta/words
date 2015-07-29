@@ -2,6 +2,7 @@
 # Still early for use in a concurrent setup
 
 from collections import defaultdict
+import re
 
 class Words:
     def __init__(self, wordfile='words'):
@@ -48,6 +49,20 @@ class Words:
     def lookup_word(self, word, n):
         gen = self.sorted_key_select(word, n)
         for w in gen:
-            if w in word_dict:
+            if w in self.word_dict:
                 yield self.word_dict[w]
+
+    def collect(self, word, n):
+        gen = self.lookup_word(word, n)
+        accm = set()
+        def generator():
+            for ws in gen:
+                nonlocal accm # Py3 ;-)
+                accm1 = accm.union(ws)
+                if accm1.difference(accm) != set():
+                    yield accm1
+                accm = accm1
+                accm1 = None
+        return generator()
+
 
